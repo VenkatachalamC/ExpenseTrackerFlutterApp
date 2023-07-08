@@ -92,7 +92,7 @@ class _ModalScreenState extends State<ModalScreen> {
           ),
           SizedBox(height: 30,),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               IconButton(
                   onPressed: () async {
@@ -121,6 +121,9 @@ class _ModalScreenState extends State<ModalScreen> {
                 width: 30,
               ),
               ElevatedButton(
+                  style: ButtonStyle(
+                    
+                  ),
                   onPressed: () {
                     if(!_price.text!.isEmpty){
                     addExpense(ExpenseModel(

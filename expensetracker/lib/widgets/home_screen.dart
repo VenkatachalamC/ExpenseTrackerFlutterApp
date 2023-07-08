@@ -3,6 +3,8 @@ import 'package:expensetracker/widgets/expense_card.dart';
 import 'package:expensetracker/widgets/expense_chart.dart';
 import 'package:expensetracker/widgets/modalscreen.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -13,13 +15,46 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<ExpenseModel> expenses=[];
-
-  void addExpense(ExpenseModel expense){
+  var db;
+  final dummyMap={
+    "Category.food":Category.food,
+    "Category.fuel":Category.fuel,
+    "Category.other":Category.other
+  };
+  void initState(){
+    init();
+  }
+  void init() async{
+    this.db=await openDatabase(join(await getDatabasesPath(),"expenses.db"),onCreate: (db, version) {
+      return db.execute('CREATE TABLE expenses(id TEXT PRIMARY KEY,price double,cat TEXT,desc TEXT,date TEXT)');
+    },
+    version: 1);
+    List<Map<String,dynamic>> data=await db.query('expenses');
+    List<ExpenseModel> dummy=[];
+    for(int i=0;i<data.length;i++){
+      dummy.add(ExpenseModel.fill(id: data[i]['id'], cat: dummyMap[data[i]['cat']], date: DateTime.parse(data[i]['date']), desc: data[i]['desc'], price: data[i]['price']));
+    }
+    setState(() {
+      expenses=dummy;
+    });
+  }
+  void addExpense(ExpenseModel expense) async{
+    await db.insert('expenses',{
+      'id':expense.id,
+      'price':expense.price,
+      'cat':expense.cat.toString(),
+      'desc':expense.desc,
+      'date':expense.date.toString()
+    });
     setState(() {
       expenses.add(expense);
     });
   }
-  void removeExpense(ExpenseModel expense){
+  void removeExpense(ExpenseModel expense) async{
+    await db.delete('expenses',
+    where:'id=?',
+    whereArgs:[expense.id]
+    );
     setState(() {
       expenses.remove(expense);
     });
