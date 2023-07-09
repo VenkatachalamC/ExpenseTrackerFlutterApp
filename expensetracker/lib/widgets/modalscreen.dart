@@ -44,10 +44,11 @@ class _ModalScreenState extends State<ModalScreen> {
             children: [
               Expanded(
                 child: TextField(
-                  decoration: InputDecoration(
+                  decoration:const InputDecoration(
                     hintText: "Amount",
                   ),
                   controller: _price,
+                  keyboardType: TextInputType.number,
                 ),
               ),
               const SizedBox(
