@@ -33,8 +33,9 @@ class _ModalScreenState extends State<ModalScreen> {
   }
 
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
       padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(color: Colors.white),
       child: Column(
         children: [
           Row(
@@ -121,9 +122,6 @@ class _ModalScreenState extends State<ModalScreen> {
                 width: 30,
               ),
               ElevatedButton(
-                  style: ButtonStyle(
-                    
-                  ),
                   onPressed: () {
                     if(!_price.text!.isEmpty){
                     addExpense(ExpenseModel(
@@ -140,12 +138,11 @@ class _ModalScreenState extends State<ModalScreen> {
                     }
                   },
                   child: const Text("Add Expense")),
-              ElevatedButton(
+              IconButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: const Text("cancel"),
-                style: const ButtonStyle(),
+                icon: Icon(Icons.cancel),
               )
             ],
           )
